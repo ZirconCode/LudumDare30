@@ -23,8 +23,13 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	
 	int tickTime = 5;
 	
-	GameState state;
+	GameState state; // TODO next time just make GameState global...
 	
+	// sounds thanks to bfxr.net
+	// TODO add sound thing to BasicGameApplet.git
+	AudioClip snd_die; 
+	AudioClip snd_hit; 
+	AudioClip snd_hit_moon; 
 	
 	// Setup
 	
@@ -39,11 +44,16 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	    bufferg = bufferi.getGraphics();
 	    
 	    setBackground(Color.black);
-	    MyFont = new Font("Arial",Font.BOLD,16);
+	    MyFont = new Font("Arial",Font.ITALIC,16);
 	    addMouseListener(this);
 	    addMouseMotionListener(this); 
 	    addKeyListener(this);
 		
+	    // load sounds
+	    snd_die = getAudioClip(getDocumentBase(),"game_over.wav"); 
+	    snd_hit = getAudioClip(getDocumentBase(),"hit.wav"); 
+	    snd_hit_moon = getAudioClip(getDocumentBase(),"moon_hit.wav"); 
+	    
 	    state = new GameState();
 	    state.height = bufferdim.height;
 	    state.width = bufferdim.width;
@@ -56,10 +66,19 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	
 	public void gameSetup()
 	{
+		// TODO next time, make this easier by just creating new GameState and putting it all in initializer there~
+		
+		// Clear previous games if any...
+		state.elements.clear();
+		state.lvlTick = 0;
+		
 		// -- Setup Game
 		state.state = 1337;  // play game
 		
-		Player p = new Player();
+		state.lives = 3;
+		state.score = 0;
+		
+		Player p = new Player(state);
 		state.elements.add(p);
 		// --
 	}
@@ -79,7 +98,7 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
         bufferg.setFont(MyFont);
         
         
-        renderGame(g);
+        renderGame(bufferg); // TODO-fixit; not renderGame(g);
         
         
 		g.drawImage(bufferi,0,0,this); 
@@ -92,7 +111,7 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 		if(state.state == 1337)
 		{
 			for(int i = 0; i<state.elements.size(); i++)
-				state.elements.get(i).render(bufferg);
+				state.elements.get(i).render(g);
 			
 			g.setColor(Color.white);
 			g.drawString("Lives: "+state.lives, 25, 25);
@@ -103,6 +122,16 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 			{
 				
 			}
+		}
+		
+		if(state.state == 33)
+		{
+			g.setColor(Color.red);
+			g.drawString("Game Over >_<", (int)(state.width/2), (int)(state.height/2));
+			g.setColor(Color.green);
+			g.drawString("Your Score: "+state.score, (int)(state.width/2), (int)(state.height/2)+50);
+			g.setColor(Color.blue);
+			g.drawString("hit the space bar to play again =)", (int)(state.width/2), (int)(state.height/2)+100);
 		}
 		
         
@@ -128,6 +157,7 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	{
 		// -- Update Game State
    	 
+		// playing
 		if(state.state == 1337)
 		{
 			state.score++; // points for being alive
@@ -151,10 +181,38 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 				
 				state.elements.add(e);
 			}
-			System.out.println(state.lvlTick);
+			//System.out.println(state.lvlTick);
+			
+			playRequestedSounds();
+			
+			// game over?
+			if(state.lives < 1)
+			{
+				snd_die.play();
+				state.state = 33;
+			}
 		}
    	 
+		// g over
+		if(state.state == 33)
+		{
+			if(state.keyDown[KeyEvent.VK_SPACE])
+			{
+				gameSetup();
+			}
+		}
+		
    	 	// --
+	}
+	
+	private void playRequestedSounds()
+	{
+		// play necessary sound effects..
+		// mehh...... quick fix for lack of sound management of any kind TODO
+		if(state.sound_to_play == 1) snd_hit.play();
+		if(state.sound_to_play == 2) snd_hit_moon.play();
+		
+		state.sound_to_play = 0;
 	}
 	
     // Teardown

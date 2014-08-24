@@ -19,6 +19,14 @@ public class Player extends Element {
 	private double mRadius = 25; // actually diameter....
 	private double mSpeedCap = 3;
 	
+	public Player(GameState s)
+	{
+		x = 75;
+		y = s.height/2;
+		mX = x-50;
+		mY = y+50;
+	}
+
 	public void render(Graphics g)
 	{
 		g.setColor(Color.red);
@@ -57,6 +65,7 @@ public class Player extends Element {
 			{
 				en.destroy(s);
 				s.lives--;
+				s.sound_to_play = 1;
 			}
 			
 			// moon
@@ -64,7 +73,8 @@ public class Player extends Element {
 			if(t)
 			{
 				en.destroy(s);
-				s.score += 1000;
+				s.score += 5000;
+				s.sound_to_play = 2;
 			}
 			
 		}	
@@ -82,8 +92,8 @@ public class Player extends Element {
 		// just another collision function in the collision-library-less walllll....
 		
 		// cX + cY not actually midpoints
-		double cXM = cX+(cR/2);
-		double cYM = cY+(cR/2);
+		double cXM = cX+(cR);
+		double cYM = cY+(cR);
 		
 		// closest point to square
 		double closestX = clamp(cXM,sX,sX+sW);

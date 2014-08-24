@@ -19,9 +19,10 @@ public class GameState {
 	public int mouseCoordX;
 	public int mouseCoordY;
 	
-	public int lives = 3; // reduces if earth touches something +destr
-	public int score = 0; // increased if moon touches something +destr
+	public int lives = 3;
+	public int score = 0;
 	
+	public int sound_to_play = 0; // meh...
 	
 	public GameState()
 	{
