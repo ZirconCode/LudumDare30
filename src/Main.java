@@ -79,7 +79,6 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
         bufferg.setFont(MyFont);
         
         
-        
         renderGame(g);
         
         
@@ -94,7 +93,18 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 		{
 			for(int i = 0; i<state.elements.size(); i++)
 				state.elements.get(i).render(bufferg);
+			
+			g.setColor(Color.white);
+			g.drawString("Lives: "+state.lives, 25, 25);
+			g.setColor(Color.white);
+			g.drawString("Score: "+state.score, 25, 50);
+			
+			if(state.lvlTick < 10000)
+			{
+				
+			}
 		}
+		
         
         // --
 	}
@@ -120,8 +130,28 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
    	 
 		if(state.state == 1337)
 		{
+			state.score++; // points for being alive
+			
 			for(int i = 0; i<state.elements.size(); i++)
 	   	 		state.elements.get(i).tick(state);
+			
+			state.lvlTick++;
+			if(state.lvlTick < 10000 && Math.random() < 0.01)
+			{
+				// spawn stuff in the messiest way possible ^_^
+				Enemy e = new Enemy();
+				
+				e.x = state.width;
+				e.y = Math.random()*state.height;
+				e.w = 50;
+				e.h = 50;
+				
+				e.xSpeed = -1*Math.random()*1;
+				e.ySpeed = (Math.random()*2)-1;
+				
+				state.elements.add(e);
+			}
+			System.out.println(state.lvlTick);
 		}
    	 
    	 	// --
