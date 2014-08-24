@@ -36,7 +36,7 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	URL baseURL;
 	MediaTracker mt;
 	Image pic_world,pic_moon;
-	Image pic_story1,pic_story2, pic_story3;
+	Image pic_story0,pic_story1,pic_story2, pic_story3;
 	
 	
 	// Setup
@@ -71,6 +71,8 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	    pic_moon = getImage(baseURL,"moon.png");
 	    mt.addImage(pic_moon,1);
 	    
+	    pic_story0 = getImage(baseURL,"story0.png");
+	    mt.addImage(pic_story0,1);
 	    pic_story1 = getImage(baseURL,"story1.png");
 	    mt.addImage(pic_story1,1);
 	    pic_story2 = getImage(baseURL,"story2.png");
@@ -100,7 +102,7 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 		state.lvlTick = 0;
 		
 		// -- Setup Game
-		state.state = 101;  // "story"
+		state.state = 100;  // "story"
 		
 		state.lives = 3;
 		state.score = 0;
@@ -135,7 +137,9 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	{
 		// -- Render Game
 		
-		if(state.state == 101)
+		if(state.state == 100)
+			g.drawImage(pic_story0,0, 0,this);
+		else if(state.state == 101)
 			g.drawImage(pic_story1,0, 0,this);
 		else if(state.state == 102)
 			g.drawImage(pic_story2,0, 0,this);
@@ -192,7 +196,7 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 		// -- Update Game State
    	 
 		// "story"
-		if(state.state > 100 && state.state < 200)
+		if(state.state >= 100 && state.state < 200)
 		{
 			state.lvlTick++;
 			
