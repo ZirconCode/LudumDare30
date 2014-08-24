@@ -9,11 +9,7 @@ public class Star extends Element{
 	private double xSpeed;
 	private Color clr;
 	
-	// get a library ...
-	private int rInt(int max)
-	{
-		return (int)(Math.random()*100);
-	}
+	
 	
 	public Star(GameState s)
 	{

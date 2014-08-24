@@ -154,22 +154,20 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 			g.setColor(Color.white);
 			g.drawString("Lives: "+state.lives, 25, 25);
 			g.setColor(Color.white);
-			g.drawString("Score: "+state.score, 25, 50);
-			
-			if(state.lvlTick < 10000)
-			{
-				
-			}
+			g.drawString("Score: "+state.score, 25, 45);
+			g.setColor(Color.white);
+			g.drawString("Level: "+(int)(state.lvlTick/1000), 25, 65);
 		}
 		
 		if(state.state == 33)
 		{
+			// TODO make method for centered text... -_-
 			g.setColor(Color.red);
-			g.drawString("Game Over >_<", (int)(state.width/2), (int)(state.height/2));
+			g.drawString("Game Over >_<", (int)(state.width/2)-150, (int)(state.height/2)-50);
 			g.setColor(Color.green);
-			g.drawString("Your Score: "+state.score, (int)(state.width/2), (int)(state.height/2)+50);
+			g.drawString("Your Score: "+state.score, (int)(state.width/2)-150, (int)(state.height/2)-50+50);
 			g.setColor(Color.blue);
-			g.drawString("hit the space bar to play again =)", (int)(state.width/2), (int)(state.height/2)+100);
+			g.drawString("hit the space bar to play again =)", (int)(state.width/2)-150, (int)(state.height/2)-50+100);
 		}
 		
         
@@ -217,19 +215,13 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	   	 		state.elements.get(i).tick(state);
 			
 			state.lvlTick++;
-			if(state.lvlTick < 10000 && Math.random() < 0.01)
+			
+			double enemyChance = Math.min(state.lvlTick/100000, 0.9)+0.01;
+					
+			if(Math.random() < enemyChance)
 			{
 				// spawn stuff in the messiest way possible ^_^
-				Enemy e = new Enemy();
-				
-				e.x = state.width;
-				e.y = Math.random()*state.height;
-				e.w = 50;
-				e.h = 50;
-				
-				e.xSpeed = -1*Math.random()*1;
-				e.ySpeed = (Math.random()*2)-1;
-				
+				Enemy e = new Enemy(state);
 				state.elements.add(e);
 			}
 			//System.out.println(state.lvlTick);
@@ -241,7 +233,7 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 			// game over?
 			if(state.lives < 1)
 			{
-				snd_die.play();
+				if(state.sound) snd_die.play();
 				state.state = 33;
 			}
 		}
@@ -252,8 +244,13 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 			if(state.keyDown[KeyEvent.VK_SPACE])
 			{
 				gameSetup();
+				state.state = 1337;
 			}
 		}
+		
+		// toogle sound
+		if(state.keyDown[KeyEvent.VK_N]) state.sound = false;
+		if(state.keyDown[KeyEvent.VK_M]) state.sound = true;
 		
    	 	// --
 	}
@@ -268,8 +265,12 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	{
 		// play necessary sound effects..
 		// mehh...... quick fix for lack of sound management of any kind TODO
-		if(state.sound_to_play == 1) snd_hit.play();
-		if(state.sound_to_play == 2) snd_hit_moon.play();
+				
+		if(state.sound) 
+		{
+			if(state.sound_to_play == 1) snd_hit.play();
+			if(state.sound_to_play == 2) snd_hit_moon.play();
+		}
 		
 		state.sound_to_play = 0;
 	}

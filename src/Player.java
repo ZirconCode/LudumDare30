@@ -5,20 +5,24 @@ import java.awt.event.KeyEvent;
 
 
 public class Player extends Element {
-
+	
 	private double x, y;
 	private double xVel, yVel;
-	private double xSpeed = 0.05, ySpeed = 0.05;
+	private double xSpeed = 0.15, ySpeed = 0.15;
+	//private double xSpeed = 2, ySpeed = 2; 
+		// TODO resistance (for moon too...)
 	private double speedCap = 2.0;
 	private double edgeModifier = 2.5;
 	private double radius = 50; // actually diameter.... >___< *shhh*
+	private double friction = 0.05;
 	
 	// TODO export moon to separate class, make recursive
 	private double mX, mY;
 	private double mXVel, mYVel;
 	private double damper = 0.001;
 	private double mRadius = 25; // actually diameter....
-	private double mSpeedCap = 3;
+	private double mSpeedCap = 7;
+	private double mFriction = 0.01; // TODO testing...
 	
 	// pics because resource management is TODO =p
 	private Image earth;
@@ -113,6 +117,16 @@ public class Player extends Element {
 		return(distance(closestX,closestY,cXM,cYM) < cR);
 	}
 	
+	// TODO stick in lib...
+	private double approach(double value, double target, double amount)
+	{
+		double newValue = value;
+		if(value>target) newValue = value-amount;
+		if(value<target) newValue = value+amount;
+		if(Math.abs(value-target)<amount) newValue = target;
+		return newValue;
+	}
+	
 	private void move(GameState s)
 	{
 		// momentum
@@ -135,6 +149,10 @@ public class Player extends Element {
 		if(y < 0) yVel += ySpeed*edgeModifier;
 		if(y > s.height) yVel -= ySpeed*edgeModifier;
 		
+		// friction
+		xVel = approach(xVel, 0, friction);
+		yVel = approach(yVel, 0, friction);
+		
 		// moon "rubber band" "physics"
 		double d = distance(x,y,mX,mY);
 		if(x > mX) mXVel += damper*d;
@@ -147,6 +165,9 @@ public class Player extends Element {
 		// moon cap
 		mXVel = Math.min(Math.max(mXVel, -mSpeedCap), mSpeedCap);
 		mXVel = Math.min(Math.max(mXVel, -mSpeedCap), mSpeedCap);
+		// moon friction?
+		mXVel = approach(mXVel, 0, mFriction);
+		mYVel = approach(mYVel, 0, mFriction);
 		
 		// speed caps
 		xVel = Math.min(Math.max(xVel, -speedCap), speedCap);
