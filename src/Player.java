@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 
 
@@ -19,24 +20,33 @@ public class Player extends Element {
 	private double mRadius = 25; // actually diameter....
 	private double mSpeedCap = 3;
 	
-	public Player(GameState s)
+	// pics because resource management is TODO =p
+	private Image earth;
+	private Image moon;
+	
+	public Player(GameState s, Image e, Image m)
 	{
 		x = 75;
 		y = s.height/2;
 		mX = x-50;
 		mY = y+50;
+		
+		earth = e;
+		moon = m;
 	}
 
 	public void render(Graphics g)
 	{
-		g.setColor(Color.red);
-		g.drawOval((int)x, (int)y, (int)radius, (int)radius);
-		
-		g.setColor(Color.blue);
-		g.drawOval((int)mX, (int)mY, (int)mRadius, (int)mRadius);
-		
 		g.setColor(Color.white);
 		g.drawLine((int)(x+radius*0.5),(int)(y+radius*0.5),(int)(mX+mRadius*0.5),(int)(mY+mRadius*0.5));
+		
+		//g.setColor(Color.red);
+		//g.drawOval((int)x, (int)y, (int)radius, (int)radius);
+		g.drawImage(earth,(int)x, (int)y,null);
+		
+		//g.setColor(Color.blue);
+		//g.drawOval((int)mX, (int)mY, (int)mRadius, (int)mRadius);
+		g.drawImage(moon,(int)mX, (int)mY,null);
 	}
 	
 	public void tick(GameState s)

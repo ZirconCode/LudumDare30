@@ -9,6 +9,7 @@
 import java.applet.*; 
 import java.awt.*; 
 import java.awt.event.*; 
+import java.net.URL;
   
 public class Main extends Applet implements MouseMotionListener, MouseListener, KeyListener, Runnable
 {
@@ -26,10 +27,17 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	GameState state; // TODO next time just make GameState global...
 	
 	// sounds thanks to bfxr.net
-	// TODO add sound thing to BasicGameApplet.git
+	// TODO add sound & image thing to BasicGameApplet.git
 	AudioClip snd_die; 
 	AudioClip snd_hit; 
 	AudioClip snd_hit_moon; 
+	
+	// images
+	URL baseURL;
+	MediaTracker mt;
+	Image pic_world;
+	Image pic_moon;
+	
 	
 	// Setup
 	
@@ -53,6 +61,18 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	    snd_die = getAudioClip(getDocumentBase(),"game_over.wav"); 
 	    snd_hit = getAudioClip(getDocumentBase(),"hit.wav"); 
 	    snd_hit_moon = getAudioClip(getDocumentBase(),"moon_hit.wav"); 
+	    
+	    // load images
+	    mt = new MediaTracker(this);
+	    try { baseURL = getDocumentBase(); } catch (Exception e) {}
+	    
+	    pic_world = getImage(baseURL,"earth2.png");
+	    mt.addImage(pic_world,1);
+	    pic_moon = getImage(baseURL,"moon.png");
+	    mt.addImage(pic_moon,1);
+	    
+	    try { mt.waitForAll(); } catch (InterruptedException  e) {}
+	    // ^- load images
 	    
 	    state = new GameState();
 	    state.height = bufferdim.height;
@@ -78,7 +98,7 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 		state.lives = 3;
 		state.score = 0;
 		
-		Player p = new Player(state);
+		Player p = new Player(state,pic_world,pic_moon);
 		state.elements.add(p);
 		// --
 	}
