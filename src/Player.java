@@ -10,13 +10,13 @@ public class Player extends Element {
 	private double xSpeed = 0.05, ySpeed = 0.05;
 	private double speedCap = 2.0;
 	private double edgeModifier = 2.5;
-	private double radius = 50;
+	private double radius = 50; // actually diameter.... >___< *shhh*
 	
 	// TODO export moon to separate class, make recursive
 	private double mX, mY;
 	private double mXVel, mYVel;
 	private double damper = 0.001;
-	private double mRadius = 25;
+	private double mRadius = 25; // actually diameter....
 	private double mSpeedCap = 3;
 	
 	public void render(Graphics g)
@@ -52,7 +52,7 @@ public class Player extends Element {
 			Enemy en = (Enemy)e;
 			
 			// earth
-			boolean t = isCircleTouchingSquare(radius, x, y, en.x, en.y, en.h, en.w);
+			boolean t = isCircleTouchingSquare(radius/2, x, y, en.x, en.y, en.h, en.w);
 			if(t) 
 			{
 				en.destroy(s);
@@ -60,7 +60,7 @@ public class Player extends Element {
 			}
 			
 			// moon
-			t = isCircleTouchingSquare(mRadius, mX, mY, en.x, en.y, en.h, en.w);
+			t = isCircleTouchingSquare(mRadius/2, mX, mY, en.x, en.y, en.h, en.w);
 			if(t)
 			{
 				en.destroy(s);
