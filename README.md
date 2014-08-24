@@ -1,11 +1,13 @@
 UltraRealistic Moon Wrecking Ball Simulator
 ===========
 
+-> bin/index.html to play if downloaded
+
 For the Ludum Dare 30 competition "Connected Worlds" at www.ludumdare.com/compo/
 
 I only had a day for this one but I'm happy how it turned out. My only regret is the lack of music (and I wish I had time to place a small iconic pop-star on the wrecking ball moon"). Had tons of fun making it =)
 
-Everything written by me in Java, no libraries used, no engines, based on a tiny applet framework of mine (ZirconCode/BasicGameApplet on github). I used bfxr.net to create the sound effects. GIMP for the stunning visuals.
+Everything written by me in Java, no libraries used, no engines, based on a tiny applet framework of mine (ZirconCode/BasicGameApplet on github). I used bfxr.net to create the sound effects. GIMP for the stunning visuals. Full Source Included of Course.
 
 Enjoy!
 / ZirconCode
