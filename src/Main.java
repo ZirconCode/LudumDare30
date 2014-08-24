@@ -35,8 +35,8 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	// images
 	URL baseURL;
 	MediaTracker mt;
-	Image pic_world;
-	Image pic_moon;
+	Image pic_world,pic_moon;
+	Image pic_story1,pic_story2, pic_story3;
 	
 	
 	// Setup
@@ -71,6 +71,13 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	    pic_moon = getImage(baseURL,"moon.png");
 	    mt.addImage(pic_moon,1);
 	    
+	    pic_story1 = getImage(baseURL,"story1.png");
+	    mt.addImage(pic_story1,1);
+	    pic_story2 = getImage(baseURL,"story2.png");
+	    mt.addImage(pic_story2,1);
+	    pic_story3 = getImage(baseURL,"story3.png");
+	    mt.addImage(pic_story3,1);
+	    
 	    try { mt.waitForAll(); } catch (InterruptedException  e) {}
 	    // ^- load images
 	    
@@ -93,7 +100,7 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 		state.lvlTick = 0;
 		
 		// -- Setup Game
-		state.state = 1337;  // play game
+		state.state = 101;  // "story"
 		
 		state.lives = 3;
 		state.score = 0;
@@ -127,6 +134,13 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	public void renderGame(Graphics g)
 	{
 		// -- Render Game
+		
+		if(state.state == 101)
+			g.drawImage(pic_story1,0, 0,this);
+		else if(state.state == 102)
+			g.drawImage(pic_story2,0, 0,this);
+		else if(state.state == 103)
+			g.drawImage(pic_story3,0, 0,this);
 		
 		if(state.state == 1337)
 		{
@@ -177,6 +191,19 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	{
 		// -- Update Game State
    	 
+		// "story"
+		if(state.state > 100 && state.state < 200)
+		{
+			state.lvlTick++;
+			
+			if(state.keyDown[KeyEvent.VK_SPACE] && state.lvlTick > 150)
+			{
+				state.state++;
+				if(state.state == 104) state.state = 1337;
+				state.lvlTick = 0;
+			}
+		}
+		
 		// playing
 		if(state.state == 1337)
 		{
