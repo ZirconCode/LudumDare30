@@ -19,9 +19,9 @@ public class GameState {
 	public int mouseCoordX;
 	public int mouseCoordY;
 	
-	public boolean sound = false;
+	public boolean sound = true;
 	
-	public int lives = 3;
+	public int lives = 5;
 	public int score = 0;
 	
 	public int sound_to_play = 0; // meh...

@@ -31,12 +31,13 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	AudioClip snd_die; 
 	AudioClip snd_hit; 
 	AudioClip snd_hit_moon; 
+	AudioClip snd_powerup; 
 	
 	// images
 	URL baseURL;
 	MediaTracker mt;
 	Image pic_world,pic_moon;
-	Image pic_story0,pic_story1,pic_story2, pic_story3;
+	Image pic_story0,pic_story1,pic_story2, pic_story3, pic_story4;
 	
 	
 	// Setup
@@ -61,6 +62,7 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	    snd_die = getAudioClip(getDocumentBase(),"game_over.wav"); 
 	    snd_hit = getAudioClip(getDocumentBase(),"hit.wav"); 
 	    snd_hit_moon = getAudioClip(getDocumentBase(),"moon_hit.wav"); 
+	    snd_powerup = getAudioClip(getDocumentBase(),"powerup.wav"); 
 	    
 	    // load images
 	    mt = new MediaTracker(this);
@@ -79,6 +81,8 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	    mt.addImage(pic_story2,1);
 	    pic_story3 = getImage(baseURL,"story3.png");
 	    mt.addImage(pic_story3,1);
+	    pic_story4 = getImage(baseURL,"story4.png");
+	    mt.addImage(pic_story4,1);
 	    
 	    try { mt.waitForAll(); } catch (InterruptedException  e) {}
 	    // ^- load images
@@ -104,7 +108,7 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 		// -- Setup Game
 		state.state = 100;  // "story"
 		
-		state.lives = 3;
+		state.lives = 5;
 		state.score = 0;
 		
 		Player p = new Player(state,pic_world,pic_moon);
@@ -145,6 +149,8 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 			g.drawImage(pic_story2,0, 0,this);
 		else if(state.state == 103)
 			g.drawImage(pic_story3,0, 0,this);
+		else if(state.state == 104)
+			g.drawImage(pic_story4,0, 0,this);
 		
 		if(state.state == 1337)
 		{
@@ -201,7 +207,7 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 			if(state.keyDown[KeyEvent.VK_SPACE] && state.lvlTick > 150)
 			{
 				state.state++;
-				if(state.state == 104) state.state = 1337;
+				if(state.state == 105) state.state = 1337;
 				state.lvlTick = 0;
 			}
 		}
@@ -217,12 +223,18 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 			state.lvlTick++;
 			
 			double enemyChance = Math.min(state.lvlTick/100000, 0.9)+0.01;
-					
+			double powerupChance = enemyChance/5; // tmp lol...
+			
+			// ^_^
 			if(Math.random() < enemyChance)
 			{
-				// spawn stuff in the messiest way possible ^_^
 				Enemy e = new Enemy(state);
 				state.elements.add(e);
+			}
+			if(Math.random() < powerupChance)
+			{
+				Powerup p = new Powerup(state);
+				state.elements.add(p);
 			}
 			//System.out.println(state.lvlTick);
 			
@@ -270,6 +282,7 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 		{
 			if(state.sound_to_play == 1) snd_hit.play();
 			if(state.sound_to_play == 2) snd_hit_moon.play();
+			if(state.sound_to_play == 3) snd_powerup.play();
 		}
 		
 		state.sound_to_play = 0;

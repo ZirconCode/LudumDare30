@@ -55,7 +55,6 @@ public class Enemy extends Element {
 		for(int i = 0; i < 20; i++) s.elements.add(new Explosion(x+(w/2),y+(h/2)));
 		
 		s.elements.remove(this);
-		// TODO particles or stuff...
 	}
 	
 }

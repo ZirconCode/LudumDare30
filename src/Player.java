@@ -28,6 +28,10 @@ public class Player extends Element {
 	private Image earth;
 	private Image moon;
 	
+	// powerup timers
+	private double invincibleEarth = 0;
+	private double bigMoon = 0;
+	
 	public Player(GameState s, Image e, Image m)
 	{
 		x = 75;
@@ -50,13 +54,47 @@ public class Player extends Element {
 		
 		//g.setColor(Color.blue);
 		//g.drawOval((int)mX, (int)mY, (int)mRadius, (int)mRadius);
-		g.drawImage(moon,(int)mX, (int)mY,null);
+		g.drawImage(moon,(int)mX, (int)mY, (int)mRadius, (int)mRadius, null);
+		
+		if(invincibleEarth > 0)
+		{
+			g.setColor(Color.blue);
+			g.drawOval((int)x-10, (int)y-10, (int)radius+20, (int)radius+20);
+			g.drawString("INVINCIBLE", (int)x-20, (int)y-25);
+			g.drawString(""+(int)invincibleEarth, (int)x, (int)y-10);
+		}
+		if(bigMoon > 0)
+		{
+			g.setColor(Color.yellow);
+			g.drawString("BIG MOON", (int)x-20, (int)(y+radius+3));
+			g.drawString(""+(int)bigMoon, (int)x, (int)(y+radius+18));
+		}
+		
 	}
 	
 	public void tick(GameState s)
 	{
 		move(s);
 		collision(s);
+		powerups(s);
+	}
+	
+	private void powerups(GameState s)
+	{
+		if(invincibleEarth>0)
+		{
+			invincibleEarth--;
+		}
+		
+		if(bigMoon>0)
+		{
+			mRadius = 150;
+			bigMoon--;
+		}
+		else
+		{
+			mRadius = 25;
+		}
 	}
 	
 	private double distance(double x1,double y1,double x2,double y2)
@@ -70,6 +108,28 @@ public class Player extends Element {
 		for(int i = 0; i<s.elements.size(); i++)
 		{
 			Element e = s.elements.get(i);
+			
+			// powerups
+			if(e.getClass() == Powerup.class)
+			{
+				Powerup p = (Powerup)e;
+				
+				boolean t = isCircleTouchingCircle(x, y, radius/2, p.x, p.y, p.d/2);
+				if(t)
+				{
+					if(p.type == 0) s.lives++;
+					if(p.type == 1) bigMoon = 1111;
+					if(p.type == 2) invincibleEarth = 1111;
+					
+					s.sound_to_play = 3;
+					
+					p.destroy(s);
+				}
+				
+				continue;
+			}
+			
+			// enemies
 			if(e.getClass() != Enemy.class) continue;
 			Enemy en = (Enemy)e;
 			
@@ -78,7 +138,7 @@ public class Player extends Element {
 			if(t) 
 			{
 				en.destroy(s);
-				s.lives--;
+				if(!(invincibleEarth > 0)) s.lives--;
 				s.sound_to_play = 1;
 			}
 			
@@ -98,6 +158,12 @@ public class Player extends Element {
 	public double clamp(double val, double min, double max)
 	{
 		return Math.min(Math.max(val, min), max);
+	}
+	
+	// creative function naming =p
+	public boolean isCircleTouchingCircle(double x1, double y1, double r1, double x2, double y2, double r2)
+	{
+		return (distance(x1,y1,x2,y2) < (r1+r2));
 	}
 	
 	public boolean isCircleTouchingSquare(double cR, double cX, double cY, double sX, double sY, double sH, double sW)
