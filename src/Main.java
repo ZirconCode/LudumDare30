@@ -185,6 +185,8 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 			
 			playRequestedSounds();
 			
+			spawnStars();
+			
 			// game over?
 			if(state.lives < 1)
 			{
@@ -203,6 +205,12 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 		}
 		
    	 	// --
+	}
+	
+	private void spawnStars()
+	{
+		if(Math.random() < 0.2)
+			state.elements.add(new Star(state));
 	}
 	
 	private void playRequestedSounds()
