@@ -2,6 +2,7 @@ UltraRealistic Moon Wrecking Ball Simulator
 ===========
 
 -> bin/index.html to play if downloaded
+-> Can be played online at http://www.zirconcode.com/ludumdare30/index.html
 
 For the Ludum Dare 30 competition "Connected Worlds" at www.ludumdare.com/compo/
 
@@ -13,7 +14,7 @@ Enjoy!
 / ZirconCode
 
 Features
-===
+---
 - Stunning Visuals
 - Realistic Physics
 - Surround Sound
@@ -21,10 +22,13 @@ Features
 - Fun
 
 Instructions
-===
+---
 - These (and more detailed) instructions available ingame before gameplay
 - Use the arrow keys to navigate
 - Space key to walk through the intro
 - Hit the n key to turn off sound (on by default)
 - Hit the m key to turn them back on again
 
+Past Entries
+---
+https://github.com/ZirconCode/LudumDare
