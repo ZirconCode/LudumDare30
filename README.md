@@ -2,6 +2,7 @@ UltraRealistic Moon Wrecking Ball Simulator
 ===========
 
 -> bin/index.html to play if downloaded
+
 -> Can be played online at http://www.zirconcode.com/ludumdare30/index.html
 
 For the Ludum Dare 30 competition "Connected Worlds" at www.ludumdare.com/compo/
